@@ -99,7 +99,9 @@ export default function Contact() {
                   className="w-full bg-[#1f5e5e] text-white py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3 hover:bg-[#2d8a8a] hover:shadow-[0_15px_30px_rgba(45,138,138,0.3)] transition-all active:scale-95 group shadow-lg"
                 >
                   <span>ابعت للرجالة</span>
-                  <MdSend size={24} className="group-hover:translate-x-2 group-hover:-translate-y-1 transition-transform" />
+                  <span className="group-hover:translate-x-2 group-hover:-translate-y-1 transition-transform">
+                    <MdSend size={24} />
+                  </span>
                 </button>
               </form>
             </div>

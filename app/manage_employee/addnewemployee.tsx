@@ -1,30 +1,48 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { FiPlus, FiX } from "react-icons/fi";
 
-export default function Addnewemployee({ setData }) {
-  const [modelOpen, setModelOpen] = useState(false);
-  // بنبدأ بـ state فاضية للموظف الجديد
-  const [formData, setFormData] = useState({
+// 1. تعريف شكل بيانات الموظف
+export interface Employee {
+  id: number;
+  name: string;
+  role: string;
+  shift: "Morning" | "Evening" | "Night";
+  status: "Active" | "On Leave" | "Inactive";
+}
+
+// 2. تعريف الـ Props اللي الكومبوننت بيستقبلها
+interface AddNewEmployeeProps {
+  setData: React.Dispatch<React.SetStateAction<Employee[]>>;
+}
+
+export default function Addnewemployee({ setData }: AddNewEmployeeProps) {
+  const [modelOpen, setModelOpen] = useState<boolean>(false);
+  
+  // 3. تحديد نوع الـ Form State
+  const [formData, setFormData] = useState<Omit<Employee, "id">>({
     name: "",
     role: "",
-    shift: "Morning", // قيمة افتراضية
-    status: "Active", // قيمة افتراضية
+    shift: "Morning",
+    status: "Active",
   });
 
   const toggleModal = () => setModelOpen(!modelOpen);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  // 4. تحديد أنواع الـ Events (التغيير في المدخلات)
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handle_add = (e) => {
+  // 5. تحديد نوع الـ Submit Event
+  const handle_add = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // بنزود الموظف الجديد على الداتا القديمة
+    // إضافة الموظف الجديد مع ID فريد
     setData((prev) => [
       ...prev,
-      { ...formData, id: Date.now() }, // بنعمل ID مؤقت عن طريق الوقت الحالي
+      { ...formData, id: Date.now() } as Employee,
     ]);
 
     // تصفير الفورم وقفل المودال
@@ -34,7 +52,6 @@ export default function Addnewemployee({ setData }) {
 
   return (
     <>
-      {/* زرار الإضافة اللي كان عندك في ManageEmployee */}
       <button
         onClick={toggleModal}
         className="bg-[#2d8a8a] text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-[#1f5e5e] transition shadow-md"
@@ -42,7 +59,6 @@ export default function Addnewemployee({ setData }) {
         <FiPlus /> Add New Employee
       </button>
 
-      {/* المودال */}
       {modelOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
           <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
@@ -70,7 +86,7 @@ export default function Addnewemployee({ setData }) {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="name"
+                    placeholder="Enter name"
                     className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
@@ -81,22 +97,20 @@ export default function Addnewemployee({ setData }) {
                   </label>
                   <select
                     name="role"
+                    required
                     value={formData.role}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-teal-500 outline-none bg-white cursor-pointer transition-all"
                   >
-                    <option value="" disabled>
-                      اختر الوظيفة
-                    </option>
+                    <option value="" disabled>اختر الوظيفة</option>
                     <option value="Pharmacist">Pharmacist</option>
                     <option value="Manager">Manager</option>
                   </select>
                 </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">
-                      الشيفت
-                    </label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">الشيفت</label>
                     <select
                       name="shift"
                       value={formData.shift}
@@ -109,9 +123,7 @@ export default function Addnewemployee({ setData }) {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">
-                      الحالة
-                    </label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">الحالة</label>
                     <select
                       name="status"
                       value={formData.status}

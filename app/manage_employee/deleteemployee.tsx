@@ -3,23 +3,28 @@ import React from 'react';
 import { FiTrash2 } from 'react-icons/fi';
 import Swal from 'sweetalert2';
 
-export default function Deleteemployee({ employeeId, onDelete }) {
+// 1. تعريف الـ Props للـ Component
+interface DeleteEmployeeProps {
+  employeeId: number | string; // حسب نوع الـ ID اللي مستخدمه في السيستم عندك
+  onDelete: (id: number | string) => void; // دالة بترجع الـ ID للـ Parent لتنفيذ الحذف
+}
+
+export default function Deleteemployee({ employeeId, onDelete }: DeleteEmployeeProps) {
   
-  const handle_delete = () => {
+  const handle_delete = (): void => {
     Swal.fire({
       title: 'هل أنت متأكد؟',
       text: "لن تتمكن من التراجع عن هذا الإجراء!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#2d8a8a', // لون الهيدر بتاع الجدول عندك
+      confirmButtonColor: '#2d8a8a', 
       cancelButtonColor: '#d33',
       confirmButtonText: 'نعم، احذفه!',
       cancelButtonText: 'إلغاء',
-      reverseButtons: true, // عشان يخلي "تأكيد" على اليمين و "إلغاء" على الشمال
+      reverseButtons: true, 
       background: '#fff',
-      border: 'none',
       customClass: {
-        popup: 'rounded-2xl', // عشان يبقى واخد نفس روح المودال
+        popup: 'rounded-2xl', 
       }
     }).then((result) => {
       if (result.isConfirmed) {
@@ -32,7 +37,7 @@ export default function Deleteemployee({ employeeId, onDelete }) {
           text: 'تم إزالة الموظف بنجاح.',
           icon: 'success',
           confirmButtonColor: '#2d8a8a',
-          timer: 1500 // يختفي لوحده بعد ثانية ونصف
+          timer: 1500 
         });
       }
     });
