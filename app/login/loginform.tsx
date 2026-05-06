@@ -140,7 +140,7 @@ export default function Loginform() {
         <label className="flex items-center gap-2 cursor-pointer hover:text-[#0d7a71] transition-colors">
           <input type="checkbox" className="accent-[#0d7a71] w-4 h-4" /> Remember Me
         </label>
-        <span className="hover:text-[#0d7a71] cursor-pointer transition-colors">Forgot Password?</span>
+     
       </div>
 
       {/* Login Button */}
